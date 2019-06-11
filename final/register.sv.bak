@@ -1,0 +1,9 @@
+module register #(
+	parameter WIDTH = 8
+) (
+	input logic Clk, Reset, Load,
+	input logic [] Din,
+	output logic [] Dout
+);
+
+endmodule

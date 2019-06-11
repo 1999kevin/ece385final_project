@@ -1,0 +1,43 @@
+module VGA_entities (
+	// Avalon Clock Input
+	input logic CLK,
+	
+	// Avalon Reset Input
+	input logic RESET,
+	
+	// Avalon-MM Slave Signals
+	input  logic AVL_READ,					// Avalon-MM Read
+	input  logic AVL_WRITE,					// Avalon-MM Write
+	input  logic AVL_CS,						// Avalon-MM Chip Select
+	input  logic [3:0] AVL_BYTE_EN,		// Avalon-MM Byte Enable
+	input  logic [3:0] AVL_ADDR,			// Avalon-MM Address
+	input  logic [31:0] AVL_WRITEDATA,	// Avalon-MM Write Data
+	output logic [31:0] AVL_READDATA,	// Avalon-MM Read Data
+	
+	// Exported Conduit
+	output logic [31:0] EXPORT_DATA		// Exported Conduit Signal to LEDs
+);
+
+	logic[15:0][31:0] REG_OUT;
+	logic[1407:0] KEY_EXPANSION;
+	
+	logic REG_START_CLEAR;
+	logic REG_DONE_SET;
+	
+	logic[127:0] REG_DEC_SOURCE;
+	logic REG_DEC_LOAD;
+
+	avalon_aes_register REG_KEY1(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd00 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[0]));
+	avalon_aes_register REG_KEY2(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd01 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[1]));
+	avalon_aes_register REG_KEY3(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd02 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[2]));
+	avalon_aes_register REG_KEY4(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd03 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[3]));
+
+	avalon_aes_register REG_ENC1(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd04 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[4]));
+	avalon_aes_register REG_ENC2(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd05 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[5]));
+	avalon_aes_register REG_ENC3(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd06 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[6]));
+	avalon_aes_register REG_ENC4(.CLK, .RESET, .LOAD(AVL_ADDR == 4'd07 && AVL_WRITE && AVL_CS), .Din(AVL_WRITEDATA), .Dout(REG_OUT[7]));
+
+	avalon_aes_register REG_DEC1(.CLK, .RESET, .LOAD(REG_DEC_LOAD || (AVL_ADDR == 4'd08 && AVL_WRITE && AVL_CS)), .Din(REG_DEC_SOURCE[127:96]), .Dout(REG_OUT[8]));
+	avalon_aes_register REG_DEC2(.CLK, .RESET, .LOAD(REG_DEC_LOAD || (AVL_ADDR == 4'd09 && AVL_WRITE && AVL_CS)), .Din(REG_DEC_SOURCE[95:64]), .Dout(REG_OUT[9]));
+	avalon_aes_register REG_DEC3(.CLK, .RESET, .LOAD(REG_DEC_LOAD || (AVL_ADDR == 4'd10 && AVL_WRITE && AVL_CS)), .Din(REG_DEC_SOURCE[63:32]), .Dout(REG_OUT[10]));
+	avalon_aes_register REG_DEC4(.CLK, .RESET, .LOAD(REG_DEC_LOAD || (AVL_ADDR == 4'd11 && AVL_WRITE && AVL_CS)), .Din(REG_DEC_SOURCE[31:0]), .Dout(REG_OUT[11]));

@@ -1,0 +1,4 @@
+module VGA_layer #(
+	parameter LAYERS = 4
+) (
+	

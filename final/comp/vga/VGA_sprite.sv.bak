@@ -1,0 +1,7 @@
+module VGA_sprite #(
+	parameter width = 64
+	parameter height = 64
+) (
+	input logic [9:0] VGA_DrawX, VGA_DrawY, SpriteX, SpriteY,
+	output logic [10:0] AVL_Addr,
+	output logic [31:0] AVL_ReadData,

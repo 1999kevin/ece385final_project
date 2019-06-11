@@ -1,0 +1,19 @@
+module lantian_mdio(
+	input logic [4:0] avalon_slave_address,
+	input logic avalon_slave_read,
+	output logic [31:0] avalon_slave_readdata,
+	output logic avalon_slave_waitrequest,
+	input logic avalon_slave_write,
+	input logic [31:0] avalon_slave_writedata,
+	
+	input logic clk_mdio,
+	input logic clk_mm,
+	input logic reset,
+	
+	output logic mdc,
+	input logic mdio_in,
+	output logic mdio_out,
+	output logic mdio_oen,
+);
+
+endmodule

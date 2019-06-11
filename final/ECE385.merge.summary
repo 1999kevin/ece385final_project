@@ -1,0 +1,14 @@
+Partition Merge Status : Successful - Tue May 07 19:00:50 2019
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+Revision Name : ECE385
+Top-level Entity Name : project_top
+Family : Cyclone IV E
+Total logic elements : 3,699
+    Total combinational functions : 3,271
+    Dedicated logic registers : 1,964
+Total registers : 1968
+Total pins : 518
+Total virtual pins : 0
+Total memory bits : 14,464
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 2
